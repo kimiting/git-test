@@ -1,12 +1,12 @@
 :root {
-  --bg: #f4f7fb;
+  --bg: #fff5f5;
   --panel: #ffffff;
-  --primary: #3b82f6;
-  --primary-dark: #2563eb;
-  --text: #1f2937;
-  --muted: #6b7280;
-  --border: #dbe3f0;
-  --shadow: 0 10px 25px rgba(31, 41, 55, 0.08);
+  --primary: #ef4444;
+  --primary-dark: #dc2626;
+  --text: #3d1f1f;
+  --muted: #7b4d4d;
+  --border: #f7c9c9;
+  --shadow: 0 10px 25px rgba(239, 68, 68, 0.12);
 }
 
 * {
@@ -16,7 +16,7 @@
 body {
   margin: 0;
   font-family: "Hiragino Sans", "Yu Gothic", sans-serif;
-  background: linear-gradient(180deg, #eef5ff 0%, var(--bg) 100%);
+  background: linear-gradient(180deg, #ffe9e9 0%, var(--bg) 100%);
   color: var(--text);
 }
 
@@ -117,7 +117,7 @@ button:hover {
 }
 
 .secondary-btn {
-  background: #e5e7eb;
+  background: #ffe4e4;
   color: var(--text);
   width: auto;
   padding: 10px 14px;
@@ -125,7 +125,7 @@ button:hover {
 }
 
 .secondary-btn:hover {
-  background: #d1d5db;
+  background: #ffcaca;
 }
 
 #copyStatus {
@@ -145,7 +145,7 @@ button:hover {
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 14px;
-  background: #f8fbff;
+  background: #fff7f7;
 }
 
 .team h3 {
