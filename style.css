@@ -102,6 +102,33 @@ button:hover {
   margin-top: 0;
 }
 
+.result-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.secondary-btn {
+  background: #e5e7eb;
+  color: var(--text);
+  width: auto;
+  padding: 10px 14px;
+  font-size: 14px;
+}
+
+.secondary-btn:hover {
+  background: #d1d5db;
+}
+
+#copyStatus {
+  min-height: 20px;
+  color: var(--primary-dark);
+  font-size: 14px;
+  font-weight: 700;
+}
+
 .teams {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));

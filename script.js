@@ -1,7 +1,11 @@
 const namesInput = document.getElementById('names');
 const teamSizeInput = document.getElementById('teamSize');
 const shuffleBtn = document.getElementById('shuffleBtn');
+const copyBtn = document.getElementById('copyBtn');
 const resultEl = document.getElementById('result');
+const copyStatusEl = document.getElementById('copyStatus');
+
+let latestTextResult = '';
 
 function shuffleArray(items) {
   const copied = [...items];
@@ -32,11 +36,21 @@ function buildTeams(names, teamSize) {
   return teams;
 }
 
+function getTeamsText(teams) {
+  return teams
+    .map((team, index) => `チーム ${index + 1}\n${team.join('\n')}`)
+    .join('\n\n');
+}
+
 function renderTeams(teams) {
   if (teams.length === 0) {
+    latestTextResult = '';
     resultEl.innerHTML = '<p class="empty">名前を入力してください。</p>';
+    copyStatusEl.textContent = '';
     return;
   }
+
+  latestTextResult = getTeamsText(teams);
 
   const html = `
     <div class="teams">
@@ -56,16 +70,41 @@ function renderTeams(teams) {
   `;
 
   resultEl.innerHTML = html;
+  copyStatusEl.textContent = '';
+}
+
+async function copyResult() {
+  if (!latestTextResult) {
+    copyStatusEl.textContent = 'まず結果を作成してください';
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(latestTextResult);
+    copyStatusEl.textContent = 'コピーしました';
+  } catch (error) {
+    const temp = document.createElement('textarea');
+    temp.value = latestTextResult;
+    document.body.appendChild(temp);
+    temp.select();
+    document.execCommand('copy');
+    document.body.removeChild(temp);
+    copyStatusEl.textContent = 'コピーしました';
+  }
 }
 
 shuffleBtn.addEventListener('click', () => {
   const teamSize = Number(teamSizeInput.value);
 
   if (!teamSize || teamSize < 1) {
+    latestTextResult = '';
     resultEl.innerHTML = '<p class="empty">1チームの人数は1以上で入力してください。</p>';
+    copyStatusEl.textContent = '';
     return;
   }
 
   const teams = buildTeams(namesInput.value, teamSize);
   renderTeams(teams);
 });
+
+copyBtn.addEventListener('click', copyResult);
