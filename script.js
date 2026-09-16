@@ -1,5 +1,6 @@
 const namesInput = document.getElementById('names');
 const teamSizeInput = document.getElementById('teamSize');
+const remainderModeInput = document.getElementById('remainderMode');
 const shuffleBtn = document.getElementById('shuffleBtn');
 const copyBtn = document.getElementById('copyBtn');
 const resultEl = document.getElementById('result');
@@ -16,7 +17,7 @@ function shuffleArray(items) {
   return copied;
 }
 
-function buildTeams(names, teamSize) {
+function buildTeams(names, teamSize, remainderMode) {
   const cleanNames = names
     .split(/\n|\r\n/)
     .map((name) => name.trim())
@@ -27,10 +28,50 @@ function buildTeams(names, teamSize) {
   }
 
   const shuffled = shuffleArray(cleanNames);
+  const totalMembers = shuffled.length;
+  const fullTeams = Math.floor(totalMembers / teamSize);
+  const remainder = totalMembers % teamSize;
   const teams = [];
 
-  for (let i = 0; i < shuffled.length; i += teamSize) {
-    teams.push(shuffled.slice(i, i + teamSize));
+  if (remainder === 0) {
+    for (let i = 0; i < shuffled.length; i += teamSize) {
+      teams.push(shuffled.slice(i, i + teamSize));
+    }
+    return teams;
+  }
+
+  let teamSizes = [];
+
+  if (remainderMode === 'last') {
+    for (let i = 0; i < fullTeams; i += 1) {
+      teamSizes.push(teamSize);
+    }
+    teamSizes.push(remainder);
+  } else if (remainderMode === 'first') {
+    for (let i = 0; i < remainder; i += 1) {
+      teamSizes.push(teamSize + 1);
+    }
+    for (let i = remainder; i < fullTeams; i += 1) {
+      teamSizes.push(teamSize);
+    }
+  } else {
+    const base = Math.floor(remainder / fullTeams);
+    const extra = remainder % fullTeams;
+
+    for (let i = 0; i < fullTeams; i += 1) {
+      const size = teamSize + base + (i < extra ? 1 : 0);
+      teamSizes.push(size);
+    }
+
+    if (remainder > 0 && fullTeams === 0) {
+      teamSizes = [remainder];
+    }
+  }
+
+  let index = 0;
+  for (const teamSizeValue of teamSizes) {
+    teams.push(shuffled.slice(index, index + teamSizeValue));
+    index += teamSizeValue;
   }
 
   return teams;
@@ -95,6 +136,7 @@ async function copyResult() {
 
 shuffleBtn.addEventListener('click', () => {
   const teamSize = Number(teamSizeInput.value);
+  const remainderMode = remainderModeInput.value;
 
   if (!teamSize || teamSize < 1) {
     latestTextResult = '';
@@ -103,7 +145,7 @@ shuffleBtn.addEventListener('click', () => {
     return;
   }
 
-  const teams = buildTeams(namesInput.value, teamSize);
+  const teams = buildTeams(namesInput.value, teamSize, remainderMode);
   renderTeams(teams);
 });
 
